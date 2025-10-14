@@ -1,44 +1,62 @@
 package com.sap.codelab
 
-
-import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
-import androidx.annotation.RequiresPermission
-import com.sap.codelab.model.Memo
+import androidx.core.app.NotificationCompat
+
 
 class NotificationHelper(private val context: Context) {
 
     companion object {
-        private const val CHANNEL_ID = "memo_reminders"
+        private const val CHANNEL_ID = "memo_geo"
+        private const val CHANNEL_NAME = "Memo Geofence"
     }
 
-    init {
+    private fun ensureChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nm.createNotificationChannel(
-                NotificationChannel(
-                    CHANNEL_ID, "Memo Reminders", NotificationManager.IMPORTANCE_DEFAULT
-                )
+                NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
             )
         }
     }
 
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    fun showMemoNotification(memo: Memo) {
-        val text = memo.description.take(140)
-        val n = NotificationCompat.Builder(context, CHANNEL_ID)
-            // .setSmallIcon(R.drawable.ic_location_reminder) // add such a drawable
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle(memo.title)
+    /**
+     * Bildirim: başlık + ilk 140 karakter, tıklamada MainActivity(edit/<memoId>) açar.
+     */
+    fun showNotificationForMemo(
+        memoId: Long,
+        title: String,
+        text: String,
+        iconRes: Int
+    ) {
+        ensureChannel()
+
+        // 🔑 ÖNEMLİ: PendingIntent’i hep buradan, doğru extra ile üret
+        val openIntent = MainActivity.intent(context, memoId)
+
+        val flags =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            else
+                PendingIntent.FLAG_UPDATE_CURRENT
+
+        val contentPi = PendingIntent.getActivity(context, 0, openIntent, flags)
+
+        val notif = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(iconRes)
+            .setContentTitle(title)
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setContentIntent(contentPi)
             .setAutoCancel(true)
             .build()
-        NotificationManagerCompat.from(context).notify(memo.id.toInt(), n)
+
+        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.notify(System.currentTimeMillis().toInt(), notif)
     }
 }
+
