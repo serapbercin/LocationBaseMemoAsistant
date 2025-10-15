@@ -23,6 +23,8 @@ import com.example.featurememo.LocalMemoRepository
 import com.example.featurememo.MemoFeature
 import com.example.featurememo.MemoRoutes
 import com.example.featurememo.memoNavGraph
+import com.example.notification.GeofenceManager
+import com.example.notification.MemoLocation
 
 class MainActivity : ComponentActivity() {
 
@@ -81,7 +83,7 @@ private fun MemoApp(activityIntent: Intent?) {
     var handled by rememberSaveable { mutableStateOf(false) }
 
     val appCtx = LocalContext.current.applicationContext
-    val geofenceManager = remember { GeofenceManager(appCtx) }
+    val geofenceManager = remember { GeofenceManager(appCtx, AppMemoProvider()) }
 
     CompositionLocalProvider(
         LocalMemoRepository provides Repository
@@ -106,9 +108,11 @@ private fun MemoApp(activityIntent: Intent?) {
                     onRegisterGeofence = { savedId, latLng ->
                         try {
                             geofenceManager.addGeofenceForMemo(
-                                memoId = savedId,
-                                lat = latLng.latitude,
-                                lng = latLng.longitude,
+                                memo = MemoLocation(
+                                    id = savedId,
+                                    lat = latLng.latitude,
+                                    lon = latLng.longitude
+                                ),
                                 radiusMeters = 500f
                             )
                         } catch (se: SecurityException) {

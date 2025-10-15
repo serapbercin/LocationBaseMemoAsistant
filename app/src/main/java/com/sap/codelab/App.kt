@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import com.example.data.Repository
+import com.example.notification.NotificationsConfig
 
 /**
  * Extension of the Android Application class.
@@ -12,10 +13,14 @@ import com.example.data.Repository
 internal class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        // Initialize the repository
+
+        // init data layer
         Repository.initialize(this)
 
-
+        // wire notifications
+        NotificationsConfig.intentFactory  = AppMemoIntentFactory()
+        NotificationsConfig.memoProvider   = AppMemoProvider()
+        NotificationsConfig.detailsProvider = AppMemoDetailsProvider()
 
         // Create the notification channel for memo reminders
         createNotificationChannel()

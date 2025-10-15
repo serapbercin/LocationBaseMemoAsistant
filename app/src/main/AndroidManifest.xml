@@ -30,29 +30,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Geofence receiver -->
-
-        <receiver
-            android:name=".GeofenceBroadcastReceiver"
-            android:exported="true"
-            tools:replace="android:exported">
-            <intent-filter>
-                <action android:name="com.sap.codelab.DEBUG_PING" />
-            </intent-filter>
-        </receiver>
-
-
-        <!-- Re-register on reboot -->
-        <receiver
-            android:name=".BootCompletedReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

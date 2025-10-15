@@ -1,4 +1,4 @@
-package com.sap.codelab
+package com.example.notification
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -14,9 +14,12 @@ class BootCompletedReceiver : BroadcastReceiver() {
         if (intent?.action != Intent.ACTION_BOOT_COMPLETED) return
         Log.d("BootCompleted", "Re-adding geofences after boot")
 
+        val provider = NotificationsConfig.memoProvider ?: return  // app must set this
+        val mgr = GeofenceManager(context.applicationContext, provider)
+
         // Repository.initialize(context) uygulama açılışında yapıldıysa, burada direkt kullanabiliriz.
         CoroutineScope(Dispatchers.IO).launch {
-            GeofenceManager(context).reAddAllGeofencesFromRepository()
+            mgr.reAddAllGeofences()
         }
     }
 }
