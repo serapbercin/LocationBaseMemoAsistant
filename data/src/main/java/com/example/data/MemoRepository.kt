@@ -1,6 +1,5 @@
 package com.example.data
 
-import androidx.annotation.WorkerThread
 import com.example.domain.MemoRepositoryApi
 import com.example.domain.Memo
 import kotlinx.coroutines.flow.Flow
@@ -20,26 +19,24 @@ class MemoRepository @Inject constructor(
     private val dao get() = appDatabase.memoDao()
 
     override suspend fun saveMemo(memo: Memo) {
-        dao.insert(memo.toEntity())
+        dao.upsert(memo.toEntity())
     }
 
-    override suspend fun getOpen(): List<Memo> =
-        dao.getOpen().map { it.toDomain() }
+    override suspend fun saveMemoAndReturnId(memo: Memo): Long =
+        dao.upsert(memo.toEntity())
 
-    @WorkerThread
-    override fun getAll(): List<Memo> = dao.getAll().map { it.toDomain() }
+    override suspend fun getAll(): List<Memo> = dao.getAll().map { it.toDomain() }
 
     override suspend fun getMemoById(id: Long): Memo =
-        dao.getMemoById(id).toDomain()
+        dao.getMemoById(id)?.toDomain()
+            ?: throw NoSuchElementException("Memo(id=$id) not found")
 
-    override suspend fun saveMemoAndReturnId(memo: Memo): Long =
-        dao.insert(memo.toEntity())
 
     override fun observeAll(): Flow<List<Memo>> {
-        return dao.observeAll()
-            .map { entityList -> entityList.map { it.toDomain() } }
+        return dao.observeAll().map { list -> list.map { it.toDomain() } }
     }
 
     override suspend fun updateMemo(memo: Memo): Int = dao.update(memo.toEntity())
 
+    override suspend fun deleteById(id: Long): Int = dao.deleteById(id)
 }

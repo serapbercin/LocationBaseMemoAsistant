@@ -1,0 +1,149 @@
+= GeoMemo – Location-Based Memo Assistant
+:toc:
+:toclevels: 3
+:icons: font
+:sectnums:
+:sectanchors:
+:source-highlighter: coderay
+
+== Overview
+
+GeoMemo allows users to create and manage memos that trigger contextual notifications when entering a specific geographic area.
+When the user approaches a saved memo location (within 200 meters), the app displays a notification containing the memo’s title and the first 140 characters of its content even if the app is in the background or closed.
+
+== Architecture
+
+=== Modular Structure
+
+The app follows a **Clean Architecture** pattern with clear separation of concerns:
+
+[cols="1,3",options="header"]
+|===
+| Module | Responsibility
+| `:app` | Application entry point, dependency graph initialization, navigation host
+| `:core` | Common utilities (permissions, configuration constants)
+
+
+| `:data` | Room database, repositories, and data sources
+| `:domain` | Business logic and use cases independent of Android framework
+| `:featurememo` | UI and ViewModel layer for memo creation and editing
+| `:notification` | Geofence management and system notification handling
+|===
+
+=== Layered Design - Module Dependencies
+
+Each module depends only on the layer directly beneath it, following strict dependency rules for clarity and reusability.
+
+:app ├── :core ├── :data ├── :domain ├── :featurememo └── :notification
+
+:core └── No dependencies (base module) ├── Config ├── Permissions
+
+:data ├── :core └── :domain ├── Repository Implementations ├── Room Database └── Data Sources
+
+:domain └── :core ├── Use Cases └── Repository Interfaces
+
+:featurememo ├── :core ├── :domain └── :data ├── UI Components ├── ViewModels └── States
+
+:notification ├── :core ├── :domain └── :data ├── GeofenceManager ├── NotificationManager └── Services
+
+== Tech Stack
+
+=== Core Technologies
+
+* **Language:** Kotlin
+* **UI:** Jetpack Compose
+* **Architecture:** MVVM + Clean Architecture
+* **Async:** Coroutines + Flow
+* **Dependency Injection:** Dagger2
+* **Navigation:** Jetpack Navigation Compose
+* **Persistence:** Room Database
+* **Background Work:** Geofencing API + Location Services
+
+=== Permissions & Services
+
+* ACCESS_FINE_LOCATION
+* ACCESS_BACKGROUND_LOCATION (for Android Q+)
+* POST_NOTIFICATIONS (Android 13+)
+
+== Main UI Flow
+
+=== User Interface
+
+:imagesdir: screenshots
+
+=== User Journey
+
+Permission Request – On first launch, the user grants location and notification permissions.
+
+Memo Creation – User adds title, description, and selects a map point.
+
+Memo Saved – A geofence is created for the selected location.
+
+Proximity Trigger – When within 200m of the saved location, the user receives a notification.
+
+Notification Tap – Reopens the memo in edit/view mode.
+
+=== Main Screens
+
+image::location_permission.png[width=250,alt="Location Permission Screen"]
+
+On first launch, the app requests location permissions to enable geofencing features.
+
+image::notification_permission.png[width=250,alt="Notification Permission Screen"]
+
+For Android 13 and above, the app requests notification permissions to send memo alerts.
+
+image::no_memo_yet.png[width=250,alt="No Memos Yet Screen"]
+
+The initial screen when no memos are present prompts the user to add a new memo.
+
+image::memo_list.png[width=250,alt="Memo List Screen"]
+
+The main screen displays all memos with their titles and distances.
+
+image::memo_create.png[width=250,alt="Create Memo Screen"]
+
+The memo creation screen allows users to input title, content, and select a location on the map.
+
+image::save_memo.png[width=250,alt="Save Memo Screen"]
+
+After entering memo details, users can save the memo which sets up geofencing.
+
+imaage::remove_memo.png[width=250,alt="Remove Memo Confirmation"]
+
+Users can delete memos with a confirmation dialog.
+
+image::memo_with_long_description.png[width=250,alt="Memo With Long Description"]
+
+Memos with long descriptions are truncated in notifications to 140 characters.
+
+image::notification_triggered.png[width=250,alt="Notification Triggered Screen"]
+
+When the user enters the geofenced area, a notification is displayed with memo details.
+
+=== Test Strategy and Test Coverage Areas
+
+GeoMemo uses the Given–When–Then methodology to ensure clarity, reproducibility, and behavior-driven validation.
+The main areas covered by tests include:
+
+* Business Logic (`domain`)
+* Data Operations (`data`)
+* UI Interactions (`featurememo`)
+
+[cols="1,3",options="header"]
+|===
+| Layer | Testing Focus
+
+
+| Domain Layer | Validates business rules and memo triggering logic.
+Given valid memo input → When processed by use case → Then expected memo entity is persisted.
+
+| Data Layer | Verifies Room database persistence and repository contracts.
+Given a stored memo → When queried by ID → Then correct entity is returned.
+| UI Layer | Tests Compose components and navigation.
+Given user input → When clicking "Save" → Then the app navigates back and triggers geofence setup.
+| Notification Layer | TODO (test is not )
+Each layer uses mocked dependencies, coroutine test dispatchers, and Flow collectors to ensure predictable asynchronous behavior.
+
+
+

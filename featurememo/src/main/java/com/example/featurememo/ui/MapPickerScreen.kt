@@ -16,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.featurememo.R
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
@@ -25,23 +27,19 @@ import com.google.maps.android.compose.MarkerState
 @SuppressLint("UnrememberedGetBackStackEntry")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapPickerScreen(
-    nav: NavController,
-) {
-
+fun MapPickerScreen(nav: NavController) {
     var picked by remember { mutableStateOf<LatLng?>(null) }
 
     Scaffold(
         floatingActionButton = {
             picked?.let { chosen ->
                 ExtendedFloatingActionButton(
-                    text = { Text("Confirm Location") },
+                    text = { Text(stringResource(R.string.cta_confirm_location)) },
                     icon = { Icon(Icons.Default.Check, null) },
                     onClick = {
-                        // Send result to the previous entry (create OR edit)
                         nav.previousBackStackEntry
                             ?.savedStateHandle
-                            ?.set("picked_location", chosen)
+                            ?.set(NavKeys.PICKED_LOCATION, chosen)
                         nav.popBackStack()
                     }
                 )
@@ -52,7 +50,9 @@ fun MapPickerScreen(
             modifier = Modifier.padding(padding),
             onMapClick = { latLng -> picked = latLng }
         ) {
-            picked?.let { Marker(state = MarkerState(it), title = "Selected") }
+            picked?.let {
+                Marker(state = MarkerState(it), title = stringResource(R.string.marker_selected))
+            }
         }
     }
 }

@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">featurememo</string>
+
+    <string name="title_memos">Memos</string>
+    <string name="cta_add">Add</string>
+    <string name="empty_memos">No memos yet. Tap + to add one.</string>
+
+    <string name="title_new_memo">New Memo</string>
+    <string name="title_edit_memo">Edit Memo</string>
+    <string name="label_title">Title</string>
+    <string name="label_description">Description</string>
+    <string name="cta_save">Save</string>
+    <string name="cta_pick_location">Pick Location on Map</string>
+    <string name="status_location_selected">Location Selected ✓</string>
+
+    <string name="cta_confirm_location">Confirm Location</string>
+    <string name="marker_selected">Selected</string>
+
+    <string name="msg_delete_success">Memo deleted</string>
+    <string name="msg_delete_failed">Failed to delete memo</string>
+    <string name="cta_delete">Delete</string>
+
+    <string name="msg_update_failed">Update failed. Please try again.</string>
+
 </resources>

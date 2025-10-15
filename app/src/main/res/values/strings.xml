@@ -1,18 +1,11 @@
 <resources>
     <string name="app_name">SAP Codelab</string>
-    <string name="action_show_all">Show All</string>
-    <string name="action_show_open">Show Open</string>
-    <string name="memo_title">Title</string>
-    <string name="new_memo">New Memo</string>
     <string name="memo_text">Text</string>
-    <string name="action_save">Save</string>
-    <string name="memo_title_empty_error">Please provide a title for this memo</string>
-    <string name="memo_text_empty_error">Please provide a memo description</string>
     <string name="google_maps_key">AIzaSyA0Ia6qaFxycQkQ7Nz0blUIctguw93Fd1E</string>
 
     <string name="title_map_select">Pick Location</string>
-    <string name="pick_on_map">Pick on map</string>
-    <string name="confirm_location">Confirm location</string>
-    <string name="location_required">Please pick a location on the map</string>
-    <string name="location_set">Location selected</string>
+
+    <string name="channel_memo_reminders_name">Memo Reminders</string>
+    <string name="channel_memo_reminders_desc">Shows notifications when you reach memo locations.</string>
+
 </resources>

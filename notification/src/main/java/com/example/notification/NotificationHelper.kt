@@ -9,6 +9,7 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
+//TODO consider Dagger setup for NotificationHelper
 class NotificationHelper(private val context: Context) {
 
     companion object {

@@ -15,12 +15,7 @@ interface MemoRepositoryApi {
     /**
      * @return all memos currently in the database.
      */
-    fun getAll(): List<Memo>
-
-    /**
-     * @return all memos currently in the database, except those that have been marked as "done".
-     */
-    suspend fun getOpen(): List<Memo>
+    suspend fun getAll(): List<Memo>
 
     /**
      * @return the memo whose id matches the given id.
@@ -29,6 +24,11 @@ interface MemoRepositoryApi {
 
     suspend fun saveMemoAndReturnId(memo: Memo): Long
 
+    /** Observe all memos as a cold flow that emits on changes. */
     fun observeAll(): Flow<List<Memo>>
+
     suspend fun updateMemo(memo: Memo): Int
+
+    /** Deletes a memo by id. @return number of rows deleted (0 if none). */
+    suspend fun deleteById(id: Long): Int
 }

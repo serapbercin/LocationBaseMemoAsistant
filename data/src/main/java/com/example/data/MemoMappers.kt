@@ -15,7 +15,7 @@ fun MemoEntity.toDomain(): Memo =
 
 fun Memo.toEntity(): MemoEntity =
     MemoEntity(
-        id = this.id ?: 0L, // Room will auto-generate if 0
+        id = this.id ?: 0L,
         title = this.title,
         description = this.description,
         reminderDate = this.reminderDate,
