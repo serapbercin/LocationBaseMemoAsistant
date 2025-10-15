@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Interface for a repository offering memo related CRUD operations.
  */
-interface IMemoRepository {
+interface MemoRepositoryApi {
 
     /**
      * Saves the given memo to the database.

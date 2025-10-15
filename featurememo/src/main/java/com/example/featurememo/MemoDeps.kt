@@ -3,11 +3,10 @@ package com.example.featurememo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.example.domain.IMemoRepository
-import com.example.featurememo.ui.EditMemoScreen
+import com.example.domain.MemoRepositoryApi
 
 // App katmanı bunu provide edecek
-val LocalMemoRepository = staticCompositionLocalOf<IMemoRepository> {
+val LocalMemoRepository = staticCompositionLocalOf<MemoRepositoryApi> {
     error("IMemoRepository is not provided")
 }
 
@@ -18,14 +17,14 @@ fun <VM : ViewModel> simpleFactory(create: () -> VM) = object : ViewModelProvide
 }
 
 
-fun createMemoVMFactory(repo: IMemoRepository) = object : ViewModelProvider.Factory {
+fun createMemoVMFactory(repo: MemoRepositoryApi) = object : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return CreateMemoViewModel2(repo) as T
     }
 }
 
-fun editMemoVMFactory(repo: IMemoRepository) = object : ViewModelProvider.Factory {
+fun editMemoVMFactory(repo: MemoRepositoryApi) = object : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return EditMemoViewModel(repo) as T

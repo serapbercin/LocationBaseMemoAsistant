@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
  * That database that is used to store information.
  */
 @Database(entities = [MemoEntity::class], version = 1, exportSchema = false)
-internal abstract class Database : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun getMemoDao(): MemoDao
+    abstract fun memoDao(): MemoDao
 }

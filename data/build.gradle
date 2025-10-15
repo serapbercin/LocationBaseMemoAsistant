@@ -41,6 +41,10 @@ ext {
 dependencies {
     implementation project(':domain')
 
+    // Dagger 2 (KSP ile)
+    implementation "com.google.dagger:dagger:2.52"
+    ksp "com.google.dagger:dagger-compiler:2.52"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // Compose BOM
     // Maps Compose + Play Services

@@ -18,12 +18,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.data.Repository
 import com.example.featurememo.LocalMemoRepository
 import com.example.featurememo.MemoFeature
 import com.example.featurememo.MemoRoutes
 import com.example.featurememo.memoNavGraph
-import com.example.notification.GeofenceManager
 import com.example.notification.MemoLocation
 
 class MainActivity : ComponentActivity() {
@@ -82,11 +80,12 @@ private fun MemoApp(activityIntent: Intent?) {
     }
     var handled by rememberSaveable { mutableStateOf(false) }
 
-    val appCtx = LocalContext.current.applicationContext
-    val geofenceManager = remember { GeofenceManager(appCtx, AppMemoProvider()) }
+    val app = LocalContext.current.applicationContext as App
+    val repo = remember { app.appComponent.memoRepository() }
+    val geofenceManager = remember { app.appComponent.geofenceManager() }
 
     CompositionLocalProvider(
-        LocalMemoRepository provides Repository
+        LocalMemoRepository provides repo
     ) {
         LaunchedEffect(incomingMemoId) {
             if (!handled && incomingMemoId > 0) {

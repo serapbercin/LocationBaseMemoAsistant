@@ -4,23 +4,26 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import com.example.data.Repository
 import com.example.notification.NotificationsConfig
+import com.sap.codelab.di.DaggerAppComponent
 
 /**
  * Extension of the Android Application class.
  */
 internal class App : Application() {
+
+    lateinit var appComponent: com.sap.codelab.di.AppComponent
+        private set
+
     override fun onCreate() {
         super.onCreate()
 
-        // init data layer
-        Repository.initialize(this)
+        appComponent = DaggerAppComponent.factory().create(this)
 
         // wire notifications
-        NotificationsConfig.intentFactory  = AppMemoIntentFactory()
-        NotificationsConfig.memoProvider   = AppMemoProvider()
-        NotificationsConfig.detailsProvider = AppMemoDetailsProvider()
+        NotificationsConfig.intentFactory   = appComponent.memoIntentFactory()
+        NotificationsConfig.memoProvider    = appComponent.memoProvider()
+        NotificationsConfig.detailsProvider = appComponent.memoDetailsProvider()
 
         // Create the notification channel for memo reminders
         createNotificationChannel()

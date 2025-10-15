@@ -3,7 +3,7 @@ package com.example.featurememo
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.IMemoRepository
+import com.example.domain.MemoRepositoryApi
 import com.example.domain.Memo
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CreateMemoViewModel2(private val repo: IMemoRepository) : ViewModel() {
+class CreateMemoViewModel2(private val repo: MemoRepositoryApi) : ViewModel() {
 
     private val _ui = MutableStateFlow(CreateMemoUiState())
     val ui = _ui.asStateFlow()
