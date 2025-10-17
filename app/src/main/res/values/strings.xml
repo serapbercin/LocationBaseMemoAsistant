@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SAP Codelab</string>
     <string name="memo_text">Text</string>
-    <string name="google_maps_key">AIzaSyA0Ia6qaFxycQkQ7Nz0blUIctguw93Fd1E</string>
+    <string name="google_maps_key">""</string>
 
     <string name="title_map_select">Pick Location</string>
 
