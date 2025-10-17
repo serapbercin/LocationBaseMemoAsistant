@@ -67,8 +67,6 @@ Each module depends only on the layer directly beneath it, following strict depe
 
 == Main UI Flow
 
-=== User Interface
-
 :imagesdir: screenshots
 
 === User Journey
