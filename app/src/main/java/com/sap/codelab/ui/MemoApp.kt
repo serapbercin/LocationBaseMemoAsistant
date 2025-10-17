@@ -27,10 +27,6 @@ internal fun MemoApp(activityIntent: Intent?) {
     val log = KotlinLogging.logger {}
     val nav = rememberNavController()
 
-    val incomingMemoId = remember(activityIntent) {
-        activityIntent?.getLongExtra(MainActivity.EXTRA_MEMO_ID, -1L) ?: -1L
-    }
-
     val memoId by rememberUpdatedState(
         newValue = activityIntent?.getLongExtra(MainActivity.EXTRA_MEMO_ID, -1L) ?: -1L
     )
